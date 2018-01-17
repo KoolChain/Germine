@@ -1,1 +1,1 @@
- export FLASK_APP=germine/germine.py && flask run
+ export FLASK_DEBUG=1 && FLASK_APP=germine/__init__.py && flask run

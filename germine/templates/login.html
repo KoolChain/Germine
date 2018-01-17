@@ -1,0 +1,11 @@
+{% from "_formhelpers.html" import render_field %}
+{% if error %}
+    <div>Error: {{ error }}</div>
+{% endif %}
+<form method=post>
+	<dl>
+		{{ render_field(form.login) }}
+        {{ render_field(form.password) }}
+	</dl>
+    <p><input type=submit></input></p>
+</form>

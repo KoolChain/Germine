@@ -2,6 +2,8 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Text
 from sqlalchemy.ext.declarative import declared_attr, declarative_base
 from sqlalchemy.orm import relationship
 
+import bcrypt
+
 
 class Base(object):
     @declared_attr
@@ -94,6 +96,37 @@ class Wallet(Base, IdMixin):
     def __str__(self):
         return self.name
 
+
+class User(Base, IdMixin):
+    login = Column(String, unique=True)
+    password_hash = Column(String)
+
+    def __str__(self):
+        return self.login
+
+    def __init__(self, login, password):
+        self.login = login
+        self.password_hash = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
+
+    def authenticate(self, challenged_password):
+        return bcrypt.checkpw(challenged_password.encode("utf8"), self.password_hash)
+
+    # Required by Flask-Login
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
+    # /Flask-Login
 
 #https://github.com/bitpay/insight-api
 #https://explorer.myhush.org/api/addr/t1LJWMM4pJ8L8RgWRmo2zF7HgU4CRfjWWkT
