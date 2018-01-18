@@ -16,6 +16,20 @@ class Base(object):
 
 Base = declarative_base(cls=Base)
 
+# Because Alembic want named constraint or it does not apply migrations
+# see: http://docs.sqlalchemy.org/en/latest/core/constraints.html#configuring-constraint-naming-conventions
+# see: https://stackoverflow.com/a/46785675/1027706
+convention = {
+  "ix": 'ix_%(column_0_label)s',
+  "uq": "uq_%(table_name)s_%(column_0_name)s",
+  "ck": "ck_%(table_name)s_%(constraint_name)s",
+  "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+  "pk": "pk_%(table_name)s"
+}
+
+Base.metadata.naming_convention=convention
+
+
 
 class IdMixin(object):
     id = Column(Integer, primary_key=True)
