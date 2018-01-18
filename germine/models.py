@@ -91,6 +91,9 @@ class Wallet(Base, IdMixin):
     currency_id = Column(Integer, ForeignKey('currency.id'))
     currency = relationship("Currency")
 
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship("User", back_populates="wallets")
+
     public_identifier = Column(String)
 
     def __str__(self):
@@ -100,6 +103,8 @@ class Wallet(Base, IdMixin):
 class User(Base, IdMixin):
     login = Column(String, unique=True)
     password_hash = Column(String)
+
+    wallets = relationship("Wallet", back_populates="user")
 
     def __str__(self):
         return self.login
@@ -127,6 +132,7 @@ class User(Base, IdMixin):
     def get_id(self):
         return str(self.id)
     # /Flask-Login
+
 
 #https://github.com/bitpay/insight-api
 #https://explorer.myhush.org/api/addr/t1LJWMM4pJ8L8RgWRmo2zF7HgU4CRfjWWkT
