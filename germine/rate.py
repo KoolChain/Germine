@@ -1,6 +1,6 @@
-from germine.api_base import WebApi
-
 import time
+
+from germine.api_base import WebApi
 
 
 class Rate(object):
@@ -21,8 +21,14 @@ class Rate(object):
     def get_rate(self, currency_name):
         if (self._now_epoch() - self.rate_epoch) > self.cache_fresh_period:
             self._refresh()
-        print ("looking for currency name {}, in {}".format(currency_name, self.rate_cache))
-        return float(next(rate["price_usd"] for rate in self.rate_cache
-                                        if rate["name"] == currency_name))
-
-
+        print(
+            "looking for currency name {}, in {}".format(
+                currency_name, self.rate_cache
+            )
+        )
+        return float(
+            next(
+                rate["price_usd"] for rate in self.rate_cache
+                if rate["name"] == currency_name
+            )
+        )

@@ -8,8 +8,3 @@ class CryptonoteApi(WebApi):
             "due": json["amtDue"],
             #"paid": json["totalPaid"],
         }
-        
-
-
-
-
