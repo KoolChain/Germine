@@ -161,8 +161,5 @@ class User(Base, IdMixin):
     # /Flask-Login
 
 
-#https://github.com/bitpay/insight-api
-#https://explorer.myhush.org/api/addr/t1LJWMM4pJ8L8RgWRmo2zF7HgU4CRfjWWkT
-
 # support XMR
 # https://cryptonote-pool-api.restlet.io/#general_information

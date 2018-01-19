@@ -5,6 +5,10 @@ from .poolapi import CryptonoteApi
 from .fixtures.initial_data import populate
 from .fixtures.loader import load_json
 
+from germine import currency_api
+
+from .rate import Rate
+
 import click 
 
 import flask
@@ -49,6 +53,10 @@ admin.add_view(ModelView(Wallet, db.session))
 admin.add_view(ModelView(PoolAddress, db.session))
 admin.add_view(ModelView(PoolApi, db.session))
 admin.add_view(ModelView(Pool, db.session))
+
+
+# Cached Rate
+rate_util = Rate()
 
 
 # from: http://flask.pocoo.org/snippets/62/
@@ -119,9 +127,28 @@ def logout():
 @app.route("/wallets")
 def get_wallets():
     wallets = db.session.query(Wallet).filter(Wallet.user == current_user)
+    results = []
+    for wallet in wallets:
+        valuation = "NOT IMPLEMENTED"
+
+        api_row = db.session.query(CurrencyApi).filter(CurrencyApi.currency == wallet.currency).one_or_none()
+        if api_row:
+            ApiClass = getattr(currency_api, api_row.classname)
+            api = ApiClass(api_row.base_url)
+            balance = api.get_balance(wallet)
+            rate = rate_util.get_rate(wallet.currency.name)
+            
+            valuation = "Confirmed: {}{unit} / {:.2f}$ | Unconfirmed {}{unit} / {:.2f}$" \
+                            .format(balance["balance"], balance["balance"]*rate,
+                                    balance["unconfirmed"], balance["unconfirmed"]*rate,
+                                    unit=wallet.currency.symbol)
+
+        results.append("{}, valuation: {}".format(wallet, valuation))
+
     return render_template('list.html',
                            label="Wallets for {}".format(current_user.login),
-                           elements=wallets)
+                           elements=results)
+
 
 @app.route("/balance-summary/<user>/<pool>")
 def balance_summary(user, pool):
