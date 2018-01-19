@@ -1,13 +1,14 @@
 from germine import models
-
-from sqlalchemy.inspection import inspect
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.inspection import inspect
 
 
 def map_field_to_type(Model):
     inspector = inspect(Model)
-    result = {}
-    return {rel.class_attribute.key: rel.mapper.class_ for rel in inspector.relationships}
+    return {
+        rel.class_attribute.key: rel.mapper.class_
+        for rel in inspector.relationships
+    }
 
 
 def load_json(json, session):
@@ -22,11 +23,13 @@ def load_json(json, session):
                 AttributeClass = field_to_type[key]
                 value = session.query(AttributeClass).filter_by(**value).one()
             initial[key] = value
-        instance =ModelClass(**initial)
+        instance = ModelClass(**initial)
         session.add(instance)
         try:
             session.commit()
         except IntegrityError as e:
             session.rollback()
-            print ("Not adding '{}', because it would cause an integrity error:\n\t{}".format(instance, e))
-
+            print(
+                "Not adding '{}', because it would cause an integrity error:"
+                "\n\t{}".format(instance, e)
+            )

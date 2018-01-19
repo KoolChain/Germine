@@ -15,7 +15,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-## Does not seem to work
+## Does not seem to work
 #from flask import current_app
 #config.set_main_option('sqlalchemy.url',
 #                       current_app.config.get('SQLALCHEMY_DATABASE_URI'))
@@ -42,7 +42,8 @@ def run_migrations_offline():
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True)
+        url=url, target_metadata=target_metadata, literal_binds=True
+    )
 
     with context.begin_transaction():
         context.run_migrations()
@@ -58,7 +59,8 @@ def run_migrations_online():
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
         prefix='sqlalchemy.',
-        poolclass=pool.NullPool)
+        poolclass=pool.NullPool
+    )
 
     with connectable.connect() as connection:
         context.configure(
@@ -70,6 +72,7 @@ def run_migrations_online():
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()
