@@ -20,15 +20,14 @@ Base = declarative_base(cls=Base)
 # see: http://docs.sqlalchemy.org/en/latest/core/constraints.html#configuring-constraint-naming-conventions
 # see: https://stackoverflow.com/a/46785675/1027706
 convention = {
-  "ix": 'ix_%(column_0_label)s',
-  "uq": "uq_%(table_name)s_%(column_0_name)s",
-  "ck": "ck_%(table_name)s_%(constraint_name)s",
-  "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-  "pk": "pk_%(table_name)s"
+    "ix": 'ix_%(column_0_label)s',
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
 }
 
-Base.metadata.naming_convention=convention
-
+Base.metadata.naming_convention = convention
 
 
 class IdMixin(object):
@@ -66,7 +65,7 @@ class PoolAddress(Base, IdMixin):
     origin = Column(String)
     port = Column(Integer)
     note = Column(Text)
-    
+
     pool_id = Column(Integer, ForeignKey('pool.id'))
     pool = relationship("Pool", back_populates="addresses")
 
@@ -125,10 +124,14 @@ class User(Base, IdMixin):
 
     def __init__(self, login, password):
         self.login = login
-        self.password_hash = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
+        self.password_hash = bcrypt.hashpw(
+            password.encode("utf8"), bcrypt.gensalt()
+        )
 
     def authenticate(self, challenged_password):
-        return bcrypt.checkpw(challenged_password.encode("utf8"), self.password_hash)
+        return bcrypt.checkpw(
+            challenged_password.encode("utf8"), self.password_hash
+        )
 
     # Required by Flask-Login
     @property
@@ -145,6 +148,7 @@ class User(Base, IdMixin):
 
     def get_id(self):
         return str(self.id)
+
     # /Flask-Login
 
 

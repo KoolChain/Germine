@@ -11,7 +11,9 @@ class PoolApi(object):
     def request(self, path):
         response = requests.get(self._endpoint(path))
         if response.status_code != 200:
-            raise Exception("Failed to talk to endpoint: {}".format(_endpoint(path)))
+            raise Exception(
+                "Failed to talk to endpoint: {}".format(_endpoint(path))
+            )
         return response.json()
 
 
@@ -22,8 +24,3 @@ class CryptonoteApi(PoolApi):
             "due": json["amtDue"],
             #"paid": json["totalPaid"],
         }
-        
-
-
-
-
