@@ -1,7 +1,6 @@
 from germine import models
-
-from sqlalchemy.inspection import inspect
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.inspection import inspect
 
 
 def map_field_to_type(Model):

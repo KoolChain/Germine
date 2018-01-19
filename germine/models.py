@@ -1,8 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Text
-from sqlalchemy.ext.declarative import declared_attr, declarative_base
-from sqlalchemy.orm import relationship
-
 import bcrypt
+from sqlalchemy import Column, ForeignKey, Integer, String, Text
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.orm import relationship
 
 
 class Base(object):

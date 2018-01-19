@@ -1,4 +1,6 @@
-from germine.models import Algorithm, Base, Currency, Pool, PoolAddress, PoolApi, Wallet
+from germine.models import (
+    Algorithm, Base, Currency, Pool, PoolAddress, PoolApi, Wallet
+)
 
 
 def populate(session):

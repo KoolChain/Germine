@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-from models import Algorithm, Base, Currency, Wallet
-
 import sqlalchemy
+from models import Algorithm, Base, Currency, Wallet
 
 if __name__ == "__main__":
     engine = sqlalchemy.create_engine('sqlite:///:memory:', echo=True)

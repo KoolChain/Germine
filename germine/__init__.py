@@ -8,8 +8,7 @@ from flask import Flask, render_template, request
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_login import (
-    LoginManager, current_user, login_required, login_user, logout_user
-)
+    LoginManager, current_user, login_required, login_user, logout_user)
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -17,8 +16,7 @@ from .fixtures.initial_data import populate
 from .fixtures.loader import load_json
 from .forms import UserLoginForm
 from .models import (
-    Algorithm, Base, Currency, Pool, PoolAddress, PoolApi, User, Wallet
-)
+    Algorithm, Base, Currency, Pool, PoolAddress, PoolApi, User, Wallet)
 from .poolapi import CryptonoteApi
 
 # Devnote: Bug with SQLAlchemy 12.0, must use a later version
