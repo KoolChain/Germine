@@ -11,7 +11,7 @@ import flask
 from flask import Flask, request, render_template
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -114,6 +114,13 @@ def logout():
     logout_user()
     return flask.redirect(flask.url_for('login'))
 
+
+@app.route("/wallets")
+def get_wallets():
+    wallets = db.session.query(Wallet).filter(Wallet.user == current_user)
+    return render_template('list.html',
+                           label="Wallets for {}".format(current_user.login),
+                           elements=wallets)
 
 @app.route("/balance-summary/<user>/<pool>")
 def balance_summary(user, pool):
