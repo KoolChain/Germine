@@ -132,7 +132,7 @@ class User(Base, IdMixin):
             challenged_password.encode("utf8"), self.password_hash
         )
 
-    # Required by Flask-Login
+    # Required by Flask-Login
     @property
     def is_active(self):
         return True

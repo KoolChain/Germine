@@ -15,7 +15,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-## Does not seem to work
+## Does not seem to work
 #from flask import current_app
 #config.set_main_option('sqlalchemy.url',
 #                       current_app.config.get('SQLALCHEMY_DATABASE_URI'))

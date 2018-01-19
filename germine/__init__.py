@@ -19,16 +19,16 @@ from .models import (
     Algorithm, Base, Currency, Pool, PoolAddress, PoolApi, User, Wallet)
 from .poolapi import CryptonoteApi
 
-# Devnote: Bug with SQLAlchemy 12.0, must use a later version
-# see: https://github.com/flask-admin/flask-admin/issues/1583#issuecomment-355897231
+# Devnote: Bug with SQLAlchemy 12.0, must use a later version see:
+# https://github.com/flask-admin/flask-admin/issues/1583#issuecomment-355897231
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('germine.config.Default')
 
-# Flask-SQLAlchemy seems to be a dependence of Flask-Admin
+# Flask-SQLAlchemy seems to be a dependence of Flask-Admin
 db = SQLAlchemy(app)
 
-# see: https://github.com/mitsuhiko/flask-sqlalchemy/issues/98
+# see: https://github.com/mitsuhiko/flask-sqlalchemy/issues/98
 Base.metadata.create_all(bind=db.engine)
 
 # Flask-Login
@@ -45,7 +45,7 @@ admin.add_view(ModelView(PoolApi, db.session))
 admin.add_view(ModelView(Pool, db.session))
 
 
-# from: http://flask.pocoo.org/snippets/62/
+# from: http://flask.pocoo.org/snippets/62/
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
