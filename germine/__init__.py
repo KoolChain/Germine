@@ -1,5 +1,5 @@
 from .forms import UserLoginForm
-from .models import Algorithm, Base, Currency, Pool, PoolAddress, PoolApi, User, Wallet
+from .models import Algorithm, Base, Currency, CurrencyApi, Pool, PoolAddress, PoolApi, User, Wallet
 from .poolapi import CryptonoteApi
 
 from .fixtures.initial_data import populate
@@ -44,6 +44,7 @@ login_manager.init_app(app)
 admin = Admin(app, name='adminsite', template_mode='bootstrap3')
 admin.add_view(ModelView(Algorithm, db.session))
 admin.add_view(ModelView(Currency, db.session))
+admin.add_view(ModelView(CurrencyApi, db.session))
 admin.add_view(ModelView(Wallet, db.session))
 admin.add_view(ModelView(PoolAddress, db.session))
 admin.add_view(ModelView(PoolApi, db.session))

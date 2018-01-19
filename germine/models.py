@@ -58,8 +58,21 @@ class Currency(Base, IdMixin):
     algorithm_id = Column(Integer, ForeignKey('algorithm.id'))
     algorithm = relationship("Algorithm", back_populates="currencies")
 
+    api = relationship("CurrencyApi", back_populates="currency")
+
     def __repr__(self):
         return "<{}({})>".format(self._class_name(), self.name)
+
+
+class CurrencyApi(Base, IdMixin):
+    currency_id = Column(Integer, ForeignKey('currency.id'), unique=True)
+    currency = relationship("Currency", back_populates="api")
+
+    classname = Column(String)
+    base_url = Column(Url)
+
+    def __repr__(self):
+        return "<{}({}, {})>".format(self._class_name(), self.currency, self.classname)
 
 
 class PoolAddress(Base, IdMixin):
