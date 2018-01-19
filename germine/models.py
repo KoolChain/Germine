@@ -16,7 +16,7 @@ class Base(object):
 Base = declarative_base(cls=Base)
 
 # Because Alembic want named constraint or it does not apply migrations
-# see: http://docs.sqlalchemy.org/en/latest/core/constraints.html#configuring-constraint-naming-conventions
+# see: http://docs.sqlalchemy.org/en/latest/core/constraints.html#configuring-constraint-naming-conventions # noqa: E501
 # see: https://stackoverflow.com/a/46785675/1027706
 convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -151,8 +151,8 @@ class User(Base, IdMixin):
     # /Flask-Login
 
 
-#https://github.com/bitpay/insight-api
-#https://explorer.myhush.org/api/addr/t1LJWMM4pJ8L8RgWRmo2zF7HgU4CRfjWWkT
+# https://github.com/bitpay/insight-api
+# https://explorer.myhush.org/api/addr/t1LJWMM4pJ8L8RgWRmo2zF7HgU4CRfjWWkT
 
 # support XMR
 # https://cryptonote-pool-api.restlet.io/#general_information

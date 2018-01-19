@@ -7,7 +7,10 @@ def file_dir():
 
 class Default:
     DEBUG = True
-    SECRET_KEY = "Q*0@+;W,`p-S_XzK{b*qn;-&xqTRN+;xZ#7T}<JgrUY^S'SlG:tOnKeK$THXZ~Q]Zj"
+    SECRET_KEY = (
+        "Q*0@+;W,`p-S_XzK{b*qn;-&xqTRN+;xZ#7T}"
+        "<JgrUY^S'SlG:tOnKeK$THXZ~Q]Zj"
+    )
     # Hardcode instance as the instance folder at the moment
     SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(
         os.path.realpath(

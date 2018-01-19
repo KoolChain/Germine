@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sqlalchemy
+
 from models import Algorithm, Base, Currency, Wallet
 
 if __name__ == "__main__":
