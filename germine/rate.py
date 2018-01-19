@@ -21,11 +21,6 @@ class Rate(object):
     def get_rate(self, currency_name):
         if (self._now_epoch() - self.rate_epoch) > self.cache_fresh_period:
             self._refresh()
-        print(
-            "looking for currency name {}, in {}".format(
-                currency_name, self.rate_cache
-            )
-        )
         return float(
             next(
                 rate["price_usd"] for rate in self.rate_cache
