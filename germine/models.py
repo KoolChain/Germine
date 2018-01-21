@@ -1,8 +1,11 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Text
 from sqlalchemy.ext.declarative import declared_attr, declarative_base
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import UniqueConstraint
 
 import bcrypt
+
+import enum
 
 
 class Base(object):
@@ -133,6 +136,8 @@ class User(Base, IdMixin):
 
     wallets = relationship("Wallet", back_populates="user")
 
+    systems = relationship("System", back_populates="owner")
+
     def __str__(self):
         return self.login
 
@@ -143,7 +148,7 @@ class User(Base, IdMixin):
     def authenticate(self, challenged_password):
         return bcrypt.checkpw(challenged_password.encode("utf8"), self.password_hash)
 
-    # Required by Flask-Login
+    # Required by Flask-Login
     @property
     def is_active(self):
         return True
@@ -159,6 +164,113 @@ class User(Base, IdMixin):
     def get_id(self):
         return str(self.id)
     # /Flask-Login
+
+
+class OperatingSystem(Base, IdMixin):
+    name = Column(String, unique=True)
+    version = Column(String)
+
+    system = relationship("System", back_populates="os")
+
+    __table_args__ = (UniqueConstraint("name",
+                                       "version",
+                                       ),
+                     )
+
+    def __str__(self):
+        return "{} {}".format(self.name, self.version)
+
+
+class HardwareNatureEnum(enum.Enum):
+    CPU = 1,
+    GPU = 2,
+    
+    def __str__(self):
+        return self.name
+
+
+class MiningHardware(Base, IdMixin):
+    nature = Column(Enum(HardwareNatureEnum))
+    name = Column(String)
+
+    system_id = Column(Integer, ForeignKey('system.id'))
+    system = relationship("System", back_populates="mining_hardwares")
+
+    id_on_system = Column(String)
+
+    __table_args__ = (UniqueConstraint("system_id",
+                                       "id_on_system",
+                                       ),
+                     )
+
+    def __str__(self):
+        return "{} {} on {}(#{})".format(self.nature,
+                                         self.name,
+                                         self.system.name,
+                                         self.id_on_system)
+
+
+class System(Base, IdMixin):
+    name = Column(String, unique=True)
+
+    os_id = Column(Integer, ForeignKey('operatingsystem.id'))
+    os = relationship("OperatingSystem", back_populates="system")
+
+    owner_id = Column(Integer, ForeignKey('user.id'))
+    owner = relationship("User", back_populates="systems")
+
+    mining_hardwares = relationship("MiningHardware", back_populates="system")
+
+    def __str__(self):
+        return "{}'s system '{}'".format(self.owner.login, self.name)
+
+
+class MiningApp(Base, IdMixin):
+    name = Column(String, unique=True)
+    miners = relationship("Miner", back_populates="mining_app")
+    
+    def __repr__(self):
+        return "<{}({})>".format(self._class_name(), self.name)
+
+
+class Miner(Base, IdMixin):
+    mining_app_id = Column(Integer, ForeignKey('miningapp.id'))
+    mining_app = relationship("MiningApp", back_populates="miners")
+    compatible_app_versions = Column(String)
+
+    currency_id = Column(Integer, ForeignKey('currency.id'))
+    currency = relationship("Currency")
+
+    arguments_template = Column(String)
+
+    mining_operations = relationship("MiningOperation", back_populates="miner")
+
+    __table_args__ = (UniqueConstraint("mining_app_id",
+                                       "compatible_app_versions",
+                                       "currency_id",
+                                       "arguments_template",
+                                       ),
+                     )
+
+class MiningOperation(Base, IdMixin):
+    miner_id = Column(Integer, ForeignKey('miner.id'))
+    miner = relationship("Miner", back_populates="mining_operations")
+
+    mining_hardware_id = Column(Integer, ForeignKey('mininghardware.id'))
+    mining_hardware = relationship("MiningHardware")
+
+    pool_id = Column(Integer, ForeignKey('pool.id')) 
+    pool = relationship("Pool")
+
+    wallet_id = Column(Integer, ForeignKey('wallet.id'))
+    wallet = relationship("Wallet")
+
+    __table_args__ = (UniqueConstraint("miner_id",
+                                       "mining_hardware_id",
+                                       "pool_id",
+                                       "wallet_id",
+                                       ),
+                     )
 
 
 # support XMR

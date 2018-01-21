@@ -1,5 +1,7 @@
 from .forms import UserLoginForm
-from .models import Algorithm, Base, Currency, CurrencyApi, Pool, PoolAddress, PoolApi, User, Wallet
+from .models import Algorithm, Base, Currency, CurrencyApi, Pool, PoolAddress, PoolApi, User, Wallet, \
+                    System, OperatingSystem, MiningApp, MiningHardware, Miner, MiningOperation
+
 from .poolapi import CryptonoteApi
 
 from .fixtures.initial_data import populate
@@ -32,7 +34,7 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('germine.config.Default')
 
 
-# Flask-SQLAlchemy seems to be a dependence of Flask-Admin
+# Flask-SQLAlchemy seems to be a dependence of Flask-Admin
 db = SQLAlchemy(app)
 
 # see: https://github.com/mitsuhiko/flask-sqlalchemy/issues/98
@@ -53,6 +55,13 @@ admin.add_view(ModelView(Wallet, db.session))
 admin.add_view(ModelView(PoolAddress, db.session))
 admin.add_view(ModelView(PoolApi, db.session))
 admin.add_view(ModelView(Pool, db.session))
+
+admin.add_view(ModelView(System,            db.session))
+admin.add_view(ModelView(OperatingSystem,   db.session))
+admin.add_view(ModelView(MiningApp,         db.session))
+admin.add_view(ModelView(MiningHardware,    db.session))
+admin.add_view(ModelView(Miner,             db.session))
+admin.add_view(ModelView(MiningOperation,   db.session))
 
 
 # Cached Rate

@@ -12,9 +12,20 @@ def map_field_to_type(Model):
 
 
 def load_json(json, session):
-    ModelClass = getattr(models, json["model"])
+    if type(json) == dict:
+        collection = [json] 
+    else:
+        collection = json
 
-    for row in json["rows"]:
+    for model in collection:
+        print("Loading entries for model: {}".format(model["model"]))
+        load_instance(model, session)
+        
+
+def load_instance(model_json, session):
+    ModelClass = getattr(models, model_json["model"])
+
+    for row in model_json["rows"]:
         instance = ModelClass()
         field_to_type = map_field_to_type(ModelClass)
         initial = {}
@@ -30,6 +41,6 @@ def load_json(json, session):
         except IntegrityError as e:
             session.rollback()
             print(
-                "Not adding '{}', because it would cause an integrity error:"
-                "\n\t{}".format(instance, e)
+                "\tNot adding '{}', because it would cause an integrity error:"
+                "\n\t\t{}".format(instance, e)
             )
