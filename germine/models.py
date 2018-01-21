@@ -2,6 +2,7 @@ from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Text
 from sqlalchemy.ext.declarative import declared_attr, declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy.inspection import inspect
 
 import bcrypt
 
@@ -15,6 +16,19 @@ class Base(object):
 
     def _class_name(self):
         return self.__class__.__name__
+
+    def as_dict(self):
+        results = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+        # We identify which relations are many_to_one, and dump the remote side (the one)
+        inspector = inspect(type(self))
+        for r in inspector.relationships:
+            ls = list(r.remote_side)
+            if ls[0].primary_key:
+                name = r.class_attribute.key
+                results[name] = getattr(self, name).as_dict()
+        return results
+
 
 
 Base = declarative_base(cls=Base)

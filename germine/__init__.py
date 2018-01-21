@@ -166,3 +166,9 @@ def balance_summary(user, pool):
     pool = db.session.query(Pool).filter(Pool.id==pool).one()
     poolapi = CryptonoteApi(pool.api_base_url)
     return str(poolapi.get_balance(wallet))
+
+
+@app.route("/dict")
+def todict():
+    instance = db.session.query(Miner).first()
+    return str(instance.as_dict())
