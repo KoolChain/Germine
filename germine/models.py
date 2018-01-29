@@ -24,7 +24,9 @@ class Base(object):
         inspector = inspect(type(self))
         for r in inspector.relationships:
             ls = list(r.remote_side)
-            if ls[0].primary_key:
+            if ls[0].primary_key: # if the other side is implicitly using this side PK
+                                  # then this side has the explicit PK to the other side
+                                  # this side is thus the many, and the other side is the one
                 name = r.class_attribute.key
                 results[name] = getattr(self, name).as_dict()
         return results
