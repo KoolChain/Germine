@@ -171,4 +171,9 @@ def balance_summary(user, pool):
 @app.route("/dict")
 def todict():
     instance = db.session.query(Miner).first()
-    return str(instance.as_dict())
+    return str(json.dumps(instance.as_dict()))
+
+
+@app.route("/api/miningoperation/<user>", methods=["POST"])
+def mining_operation(user):
+    return "Mining Op: {}".format(str(request.form))
