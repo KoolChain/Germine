@@ -60,7 +60,7 @@ UrlPattern = String
 
 
 class Algorithm(Base, IdMixin):
-    name = Column(String)
+    name = Column(String, unique=True)
     currencies = relationship("Currency", back_populates="algorithm")
 
     def __str__(self):
@@ -102,6 +102,14 @@ class PoolAddress(Base, IdMixin):
     pool_id = Column(Integer, ForeignKey('pool.id'))
     pool = relationship("Pool", back_populates="addresses")
 
+    __table_args__ = (UniqueConstraint("origin",
+                                       "port",
+                                       ),
+                     )
+
+    def __str__(self):
+        return "{} ({})".format(self.origin, self.port)
+
 
 class PoolApi(Base, IdMixin):
     name = Column(String, unique=True)
@@ -113,7 +121,7 @@ class PoolApi(Base, IdMixin):
 
 
 class Pool(Base, IdMixin):
-    name = Column(String, name=True)
+    name = Column(String, unique=True)
     base_url = Column(Url)
     wallet_stat_url = Column(UrlPattern)
 
@@ -197,7 +205,7 @@ class OperatingSystem(Base, IdMixin):
         return "{} {}".format(self.name, self.version)
 
 
-class HardwareNatureEnum(enum.Enum):
+class DeviceNatureEnum(enum.Enum):
     CPU = 1,
     GPU = 2,
     
@@ -205,12 +213,12 @@ class HardwareNatureEnum(enum.Enum):
         return self.name
 
 
-class MiningHardware(Base, IdMixin):
-    nature = Column(Enum(HardwareNatureEnum))
+class MiningDevice(Base, IdMixin):
+    nature = Column(Enum(DeviceNatureEnum))
     name = Column(String)
 
     system_id = Column(Integer, ForeignKey('system.id'))
-    system = relationship("System", back_populates="mining_hardwares")
+    system = relationship("System", back_populates="mining_devices")
 
     id_on_system = Column(String)
 
@@ -235,7 +243,7 @@ class System(Base, IdMixin):
     owner_id = Column(Integer, ForeignKey('user.id'))
     owner = relationship("User", back_populates="systems")
 
-    mining_hardwares = relationship("MiningHardware", back_populates="system")
+    mining_devices = relationship("MiningDevice", back_populates="system")
 
     def __str__(self):
         return "{}'s system '{}'".format(self.owner.login, self.name)
@@ -272,8 +280,8 @@ class MiningOperation(Base, IdMixin):
     miner_id = Column(Integer, ForeignKey('miner.id'))
     miner = relationship("Miner", back_populates="mining_operations")
 
-    mining_hardware_id = Column(Integer, ForeignKey('mininghardware.id'))
-    mining_hardware = relationship("MiningHardware")
+    mining_device_id = Column(Integer, ForeignKey('miningdevice.id'))
+    mining_device = relationship("MiningDevice")
 
     pool_id = Column(Integer, ForeignKey('pool.id')) 
     pool = relationship("Pool")
@@ -282,7 +290,7 @@ class MiningOperation(Base, IdMixin):
     wallet = relationship("Wallet")
 
     __table_args__ = (UniqueConstraint("miner_id",
-                                       "mining_hardware_id",
+                                       "mining_device_id",
                                        "pool_id",
                                        "wallet_id",
                                        ),

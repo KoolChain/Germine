@@ -1,0 +1,58 @@
+[
+    {
+        "model": "Algorithm",
+        "rows": [
+            {"name": "CryptoNight"},
+            {"name": "Equihash"}
+        ]
+    },
+    {
+        "model": "Currency",
+        "rows": [ 
+            {
+                "name": "Hush",
+                "symbol": "HUSH", 
+                "algorithm": {"name": "Equihash"}
+            },
+            {
+                "name": "Monero",
+                "symbol": "XMR", 
+                "algorithm": {"name": "CryptoNight"}
+            },
+            {
+                "name": "Electroneum",
+                "symbol": "ETN", 
+                "algorithm": {"name": "CryptoNight"}
+            }
+        ]
+    },
+    {
+        "model": "PoolAddress",
+        "rows": [
+            {"origin": "fr01.supportxmr.com", "port": 7777}
+        ]
+    },
+    {
+        "model": "PoolApi",
+        "rows": [
+            {"name": "Cryptonote-Pool", "classname": "CryptonoteApi"}
+        ]
+    },
+    {
+        "model": "Pool",
+        "rows": [
+            {
+                "name": "supportXMR",
+                "currency": {"symbol": "XMR"},
+                "base_url": "https://supportxmr.com/",
+                "addresses": [
+                    {"origin": "fr01.supportxmr.com"}
+                ],
+                "wallet_stat_url": "https://supportxmr.com/#/dashboard",
+                "api":{"name": "Cryptonote-Pool"},
+                "api_base_url": "https://supportxmr.com/api/"
+            }
+        ]
+    }
+]
+

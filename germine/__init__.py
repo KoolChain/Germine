@@ -1,10 +1,9 @@
 from .forms import UserLoginForm
 from .models import Algorithm, Base, Currency, CurrencyApi, Pool, PoolAddress, PoolApi, User, Wallet, \
-                    System, OperatingSystem, MiningApp, MiningHardware, Miner, MiningOperation
+                    System, OperatingSystem, MiningApp, MiningDevice, Miner, MiningOperation
 
 from .poolapi import CryptonoteApi
 
-from .fixtures.initial_data import populate
 from .fixtures.loader import load_json
 
 from germine import currency_api
@@ -59,7 +58,7 @@ admin.add_view(ModelView(Pool, db.session))
 admin.add_view(ModelView(System,            db.session))
 admin.add_view(ModelView(OperatingSystem,   db.session))
 admin.add_view(ModelView(MiningApp,         db.session))
-admin.add_view(ModelView(MiningHardware,    db.session))
+admin.add_view(ModelView(MiningDevice,      db.session))
 admin.add_view(ModelView(Miner,             db.session))
 admin.add_view(ModelView(MiningOperation,   db.session))
 
@@ -77,16 +76,12 @@ def is_safe_url(target):
            
 
 @app.cli.command()
-def initial_fixture():
-    print("Importing fixture")
-    populate(db.session)
-
-
-@app.cli.command()
 @click.argument("filename")
 def json_fixture(filename):
     print("Importing json fixture")
-    load_json(json.load(open(os.path.join(app.instance_path, filename))), db.session)
+    if not os.path.isabs(filename):
+        filename = os.path.join(app.instance_path, filename)
+    load_json(json.load(open(filename)), db.session)
     
 
 @app.route("/")
