@@ -38,7 +38,7 @@ if __name__ == "__main__":
     print(template.format(**response.json()))
 
     print("\n### MINING OPERATION ###")
-    parameters = {"mininghardware": "1080Ti", "system": "6600_Ubuntu"}
+    parameters = {"device_id_on_system": "0", "system_name": "6600_Ubuntu"}
 
     response = requestsLib(args.server, parameters)
     print("lib requests response({}): {}".format(response.status_code, response.text))

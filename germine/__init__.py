@@ -171,4 +171,11 @@ def todict():
 
 @app.route("/api/miningoperation/<user>", methods=["POST"])
 def mining_operation(user):
-    return "Mining Op: {}".format(str(request.form))
+    device = db.session.query(MiningDevice) \
+                       .filter(MiningDevice.id_on_system == request.form["device_id_on_system"]) \
+                       .filter(MiningDevice.system.name  == request.form["system_name"])
+    operation = db.session.query(MiningOperation).filter(MininingOperation.mining_device == device) \
+                          .one()
+
+    return "Mining Op: {}".format(json.dumps(operation))
+
