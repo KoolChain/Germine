@@ -4,5 +4,5 @@ Flask==0.12.2
 Flask-Admin==1.5.0
 Flask-Login==0.4.1
 Flask-SQLAlchemy==2.3.2
-requests==2.18.4
+requests==2.20.0
 SQLAlchemy==1.2.0b3
